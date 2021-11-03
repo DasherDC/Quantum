@@ -13,7 +13,7 @@ outfile='eng_ecut.dat'
 echo '# encut(eV) energy(eV/cell) time-used(seconds)' > ${outfile}
 
 # Loop over e-cut
-for ecut in `seq 200 10 500`
+for ecut in `seq 250 10 600`
 do
 # Prepare INCAR
 cat > INCAR << EOF
