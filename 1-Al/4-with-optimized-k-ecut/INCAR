@@ -18,7 +18,7 @@ EDIFF   =  1E-6     # 1E-3 very low precision for pre-relaxation, use 1E-5 next
 
 # electronic relaxation
 ALGO    = Fast
-ENCUT   =  300     # cutoff energy
+ENCUT   =  450     # cutoff energy
 ISMEAR  =  -5      # -5 = tetraedon, 1..N = Methfessel
 #SIGMA   =  0.05
 
