@@ -1,0 +1,46 @@
+#!/bin/bash
+# Script to calculate the lattice constant of fcc Al
+
+# Get the number of processors, by default, 1
+if [ "$#" -ge 1 ]; then
+   np=$1
+else
+   np=4
+fi
+
+# Define the output file and its header
+outfile='eng_a.dat'
+echo '#vol/atom energy(eV/cell) a (ang) time-used(seconds)' > ${outfile}
+
+# Loop over a
+for a in `seq 3.80 0.02 4.20`
+do
+# Prepare POSCAR
+cat > POSCAR << EOF
+FCC Al - primitive cell
+${a}
+0.0 0.5 0.5
+0.5 0.0 0.5
+0.5 0.5 0.0
+Al
+1
+Direct
+0.0 0.0 0.0
+EOF
+
+# Run vasp
+mpirun --allow-run-as-root -np ${np} vasp
+
+# Collect info
+nat=`grep 'NIONS' OUTCAR |tail -1|awk '{print $12}'`
+vol=`grep ' volume of cell' OUTCAR |tail -1|awk -v n=${nat} '{print $5/n}'`
+eng=`grep 'free  energy' OUTCAR | awk -v n=${nat} '{print $5/n}'`
+sec=`grep 'Total CPU time used' OUTCAR |awk '{print $6}'`
+echo "$vol $eng $a $sec" >> ${outfile}
+
+rm -rf WAVECAR
+#
+done
+
+# Clean up
+rm -rf CHG CHGCAR CONTCAR DOSCAR EIGENVAL IBZKPT OSZICAR OUTCAR PBS.batch PCDAT vasprun.xml XDATCAR REPORT

@@ -1,0 +1,27 @@
+ISTART = 0
+ICHARG = 2
+# POTIM   = 0.2
+
+# ionic relaxation
+# NSW     = 200       # number of ionic steps
+# IBRION  = 2         # 2=conjucate gradient, 1=Newton like
+# ISIF    = 2         # 3=relax everything, 2=relax ions only, 4=keep volume fixed
+# ADDGRID = T
+# ISPIN   = 2
+# MAGMOM  = 2.5
+
+# precision parameters
+PREC    = Accurate  # precision low, med, high, accurate
+EDIFF   =  1E-6     # 1E-3 very low precision for pre-relaxation, use 1E-5 next
+# EDIFFG  = -5E-4     # usually: 10 * EDIFF
+NELMIN  = 8
+
+# electronic relaxation
+ALGO    = Fast
+ENCUT   =  450     # cutoff energy
+ISMEAR  =  0      # -5 = tetraedon, 1..N = Methfessel
+#SIGMA   =  0.05
+
+# output options
+LWAVE   = .FALSE.   # write or don't write WAVECAR
+LCHARG  = .TRUE.    # write or don't write CHG and CHGCAR

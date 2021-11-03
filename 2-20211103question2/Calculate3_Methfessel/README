@@ -1,0 +1,28 @@
+
+The example in this directory illustrates the calculation of lattice
+constant of FCC Cu by scanning.
+
+To run this example, simply invoke:
+   ./run
+
+Once the calculation is done, you should find a new file named
+   eng_a.dat
+in your directory, which contains the 
+1) volume per atom of the cell;
+2) total energy of the system, eV/cell;
+3) lattice parameter;
+4) time used for the calculation.
+
+Invoke
+   ../0-tools/eos_fit
+to fit the calculated volume-energy data to the Murnagham's Equation of State
+and derive the equilibrium volume, energy, bulk modulus of the material.
+
+You can modify the file of "run" to use a different lattice parameter range.
+Also, one can modify the following files for the calculation of a different
+system:
+1) INCAR, if needed;
+2) run, to define the lattice and crystal;
+3) KPOINTS, if needed;
+4) POTCAR, must be the one that corresponds to the elements in your new crystal.
+
