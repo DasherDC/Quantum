@@ -1,0 +1,5 @@
+将POSCAR和POTCAR文件做了替换
+run文件未做修改
+INCAR文件未做修改
+KPOINTS文件由run文件生成
+

@@ -1,0 +1,17 @@
+
+The example in this directory illustrates the single point energy
+calculation for FCC Cu with converged k-mesh and cutoff energy. The lattice
+parameter of the primitive cell is set to that of the experimental value.
+
+To run this example, simply invoke:
+   ./run
+or
+   vasp
+
+You can compare the energy from the current run with that in the 1st example by:
+  grep 'free  energy' ../../1-single-point-fcc-Cu/OUTCAR
+  grep 'free  energy' OUTCAR
+
+The 1st one will give you the final free energy for calculation without convergence
+test, and the 2nd one will give you that for the current run.
+

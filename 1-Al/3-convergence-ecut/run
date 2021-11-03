@@ -1,0 +1,63 @@
+#!/bin/bash
+# Script to do convergence test agains the cutoff energy
+
+# Get the number of processors, by default, 1
+if [ "$#" -ge 1 ]; then
+   np=$1
+else
+   np=4
+fi
+
+# Define the output file and its header
+outfile='eng_ecut.dat'
+echo '# encut(eV) energy(eV/cell) time-used(seconds)' > ${outfile}
+
+# Loop over e-cut
+for ecut in `seq 200 10 400`
+do
+# Prepare INCAR
+cat > INCAR << EOF
+ISTART = 0
+ICHARG = 2
+# POTIM   = 0.2
+
+# ionic relaxation
+# NSW     = 200       # number of ionic steps
+# IBRION  = 2         # 2=conjucate gradient, 1=Newton like
+# ISIF    = 2         # 3=relax everything, 2=relax ions only, 4=keep volume fixed
+# ADDGRID = T
+# ISPIN   = 2
+# MAGMOM  = 2.5
+
+# precision parameters
+PREC    = Accurate  # precision low, med, high, accurate
+EDIFF   =  1E-6     # 1E-3 very low precision for pre-relaxation, use 1E-5 next
+# EDIFFG  = -5E-4     # usually: 10 * EDIFF
+# NELMIN  = 8
+
+# electronic relaxation
+ALGO    = Fast
+ENCUT   =  ${ecut} # cutoff energy
+ISMEAR  =  -5      # -5 = tetraedon, 1..N = Methfessel
+#SIGMA   =  0.05
+
+# output options
+LWAVE   = .FALSE.   # write or don't write WAVECAR
+LCHARG  = .TRUE.    # write or don't write CHG and CHGCAR
+0 0 0
+EOF
+
+# Run vasp
+mpirun --allow-run-as-root -np ${np} vasp
+
+# Collect necessary info
+eng=`grep 'free  energy' OUTCAR | awk '{print $5}'`
+sec=`grep 'Total CPU time used' OUTCAR |awk '{print $6}'`
+echo "$ecut $eng $sec" >> ${outfile}
+
+rm -rf WAVECAR
+
+done
+
+# Cleanup
+rm -rf CHG CHGCAR CONTCAR DOSCAR EIGENVAL IBZKPT OSZICAR OUTCAR PBS.batch PCDAT vasprun.xml XDATCAR REPORT

@@ -1,0 +1,38 @@
+#!/bin/bash
+# Script to do convergence test agains the k-mesh size
+# Get the number of processors, by default, 1
+if [ "$#" -ge 1 ]; then
+   np=$1
+else
+   np=4
+fi
+#
+# Define the output file and its header
+outfile='eng_k.dat'
+echo '# k-size energy(eV/cell) time-used(seconds) num-ir-k' > ${outfile}
+#
+# Loop over k
+for k in `seq 3 2 20`
+do
+cat > KPOINTS << EOF
+Auto
+0
+Monkhorst-Pack
+$k $k $k
+0 0 0
+EOF
+
+mpirun --allow-run-as-root -np ${np} vasp
+#
+# Collect the data
+eng=`grep 'free  energy' OUTCAR | awk '{print $5}'`
+sec=`grep 'Total CPU time used' OUTCAR |awk '{print $6}'`
+nir=`grep 'irreducible k-points:' OUTCAR |awk '{print $2}'`
+echo "$k $eng $sec $nir" >> ${outfile}
+#
+rm -rf WAVECAR
+#
+done
+#
+# Cleanup
+rm -rf CHG CHGCAR CONTCAR DOSCAR EIGENVAL IBZKPT OSZICAR OUTCAR PBS.batch PCDAT vasprun.xml XDATCAR REPORT

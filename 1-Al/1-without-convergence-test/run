@@ -1,0 +1,15 @@
+#!/bin/bash
+# Script to run vasp
+
+# Get the number of processors, by default, 1
+if [ "$#" -ge 1 ]; then
+   np=$1
+else
+   np=4
+fi
+
+# Run vasp
+mpirun --allow-run-as-root -np ${np} vasp
+
+# Uncomment to clean up
+#rm -rf CHG CONTCAR EIGENVAL IBZKPT OSZICAR PBS.batch PCDAT vasprun.xml XDATCAR WAVECAR REPORT

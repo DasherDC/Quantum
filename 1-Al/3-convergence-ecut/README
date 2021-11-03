@@ -1,0 +1,20 @@
+
+The example in this directory illustrates the convergence test
+with respect to plane wave cutoff energy for FCC Cu. The lattice
+parameter of the primitive cell is set to that of the experimental value.
+
+To run this example, simply invoke:
+   ./run
+
+Once the calculation is done, you should find a new file named
+   eng_cut.dat
+in your directory.
+
+Invoke
+   ../../0-tools/check_conv_ecut
+to check the the energy of the system as a function of cutoff energy.
+
+
+You can modify the file of "run" to use a different cutoff energy range
+to test the convergence w.r.t cutoff energy.
+
